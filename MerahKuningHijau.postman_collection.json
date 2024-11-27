@@ -1,0 +1,1264 @@
+{
+	"info": {
+		"_postman_id": "1e21ac7f-03ed-402a-b5e2-95ac5e7b34c9",
+		"name": "MerahKuningHijau",
+		"description": "##### 1\\. **Authentication Flow**\n\n- **Register (/register)**: Pengguna yang belum terdaftar dapat membuat akun baru.\n    \n- **Login (/login)**: Pengguna yang sudah memiliki akun dapat melakukan login.\n    \n- **Logout (/logout)**: Pengguna yang sudah login dapat melakukan logout.\n    \n\n##### 2\\. **Authorization**\n\n- Aplikasi menggunakan middleware auth:sanctum untuk memastikan semua endpoint yang memerlukan autentikasi hanya dapat diakses oleh pengguna yang sudah login.\n    \n- Middleware CheckRole digunakan untuk membatasi akses berdasarkan peran pengguna (Customer atau Merchant).\n    \n\n##### 3\\. **Customer Flow**\n\n- **Profil Customer**\n    \n    - **GET /customer/profile**: Mendapatkan data profil customer yang sedang login.\n        \n    - **PUT /customer/profile**: Memperbarui data profil customer yang sedang login.\n        \n- **Produk**\n    \n    - **GET /product/all**: Mendapatkan semua produk yang tersedia di marketplace.\n        \n- **Transaksi Customer**\n    \n    - **GET /transaksi/pemesanan**: Melihat daftar pemesanan/transaksi yang dilakukan oleh customer yang sedang login.\n        \n\n##### 4\\. **Merchant Flow**\n\n- **Profil Merchant**\n    \n    - **GET /merchant/profile**: Mendapatkan data profil merchant yang sedang login.\n        \n    - **PUT /merchant/profile**: Memperbarui data profil merchant yang sedang login.\n        \n- **Produk**\n    \n    - **GET /product**: Mendapatkan daftar produk yang dimiliki oleh merchant.\n        \n    - **POST /product**: Menambahkan produk baru oleh merchant.\n        \n    - **PUT /product/{product}**: Memperbarui produk tertentu milik merchant.\n        \n    - **DELETE /product/{product}**: Menghapus produk tertentu milik merchant.\n        \n- **Transaksi Merchant**\n    \n    - **GET /transaksi**: Mendapatkan daftar transaksi yang diterima oleh merchant.\n        \n    - **PUT /transaksi/{transaksi}**: Memperbarui status atau detail transaksi tertentu.\n        \n    - **DELETE /transaksi/{transaksi}**: Menghapus transaksi tertentu.\n        \n\n##### 5\\. **General Flow (Untuk Semua Pengguna yang Login)**\n\n- **Produk**\n    \n    - **GET /product/{product}**: Mendapatkan detail produk tertentu berdasarkan ID.\n        \n- **Transaksi**\n    \n    - **POST /transaksi**: Membuat transaksi baru.\n        \n    - **GET /transaksi/{transaksi}**: Mendapatkan detail transaksi tertentu berdasarkan ID.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25142347"
+	},
+	"item": [
+		{
+			"name": "Merchant",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "nama",
+											"value": "PT AMAN TEKNO SOLUSI",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "merchant@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "Merchant",
+											"description": "[\"Merchant\", \"Customer\"]",
+											"type": "text"
+										},
+										{
+											"key": "no_hp",
+											"value": "0821-2868-1028",
+											"type": "text"
+										},
+										{
+											"key": "alamat",
+											"value": "Citra Lake Sawangan Blok E01 Nomor 23, Jalan Raya Cinangka Raya KM 3 Bojongsari Baru, RT 001, RW 004",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/register",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "merchant@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/login",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Public_Url}}/api/logout",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Product",
+					"item": [
+						{
+							"name": "Read",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Public_Url}}/api/product",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "nama",
+											"value": "Kipas Angin",
+											"type": "text"
+										},
+										{
+											"key": "deskripsi",
+											"value": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas ad, repellendus labore culpa similique porro dolorum totam nostrum accusamus blanditiis quisquam fugit. Maxime vel error aut commodi possimus recusandae quo.",
+											"type": "text"
+										},
+										{
+											"key": "harga",
+											"value": "12000",
+											"type": "text"
+										},
+										{
+											"key": "kondisi",
+											"value": "Baru",
+											"description": "[\"Bekas\", \"Bekas - Seperti Baru\", \"Bekas\"]",
+											"type": "text"
+										},
+										{
+											"key": "berat",
+											"value": "200",
+											"description": "Berat dalam satuan gram",
+											"type": "text"
+										},
+										{
+											"key": "kategori",
+											"value": "electronic",
+											"type": "text"
+										},
+										{
+											"key": "upload",
+											"description": "[\"jpg\", \"png\", \"jpeg\"]",
+											"type": "file",
+											"src": "postman-cloud:///1efabe7d-8ebe-4cb0-a00b-99a4ef62edd8"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/product",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Public_Url}}/api/product/1",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"product",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_method",
+											"value": "PUT",
+											"type": "text"
+										},
+										{
+											"key": "nama",
+											"value": "Product update",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "deskripsi",
+											"value": "Deskripsi update",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "harga",
+											"value": "150000",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "kondisi",
+											"value": "Bekas",
+											"description": "[\"Bekas\", \"Bekas - Seperti Baru\", \"Bekas\"]",
+											"type": "text"
+										},
+										{
+											"key": "berat",
+											"value": "1500",
+											"description": "Berat dalam satuan gram",
+											"type": "text"
+										},
+										{
+											"key": "kategori",
+											"value": "Kategori update",
+											"type": "text"
+										},
+										{
+											"key": "upload",
+											"description": "[\"jpg\", \"png\", \"jpeg\"]",
+											"type": "file",
+											"src": "postman-cloud:///1efabeae-700e-4ff0-95da-8bb54e502d0d"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/product/1",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"product",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Public_Url}}/api/product/1",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"product",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Transaksi",
+					"item": [
+						{
+							"name": "Read",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Public_Url}}/api/transaksi",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"transaksi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Public_Url}}/api/transaksi/1",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"transaksi",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_method",
+											"value": "PUT",
+											"type": "text"
+										},
+										{
+											"key": "product_id",
+											"value": "1",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "quantity",
+											"value": "1",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "pengiriman",
+											"value": "jne",
+											"contentType": "application/json",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/transaksi/1",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"transaksi",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{merchant_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Public_Url}}/api/transaksi/1",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"transaksi",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{merchant_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Public_Url}}/api/merchant/profile",
+							"host": [
+								"{{Public_Url}}"
+							],
+							"path": [
+								"api",
+								"merchant",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{merchant_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "Nama update",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "update@mail.com",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passwordupdate",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "no_hp",
+									"value": "0812-3456-7890",
+									"type": "text"
+								},
+								{
+									"key": "alamat",
+									"value": "Alamat update",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Public_Url}}/api/merchant/profile",
+							"host": [
+								"{{Public_Url}}"
+							],
+							"path": [
+								"api",
+								"merchant",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Merchant folder berisi sekumpulan API yang digunakan untuk mengelola data dan aktivitas merchant dalam marketplace. API ini memungkinkan merchant untuk mendaftarkan product, mengelola transaksi. Berikut adalah beberapa endpoint utama yang terdapat dalam folder ini:\n\n- Detail dan Update  \n    Digunakan untuk melakukan perubahan atau melihat data Merchant, seperti nama, email bahkan password.\n    \n- Folder Auth  \n    Didalam folder Auth terdapat 3 buah endpoint yaitu: Register, Login, Logout. Digunakan untuk authentication pada Merchant.\n    \n- Folder Product  \n    Didalam folder product terdapat 5 buah end point yaitu: Read, Create, Update, Detail dan Delete. Dimana semua endpoint tersebut digunakan untuk mengelola data-data product.\n    \n- Folder Transaksi  \n    Didalam folder transaksi terdapat 5 buah end point yaitu: Read, Create, Detail, Update dan Delete. Dimana semua endpoint tersebut digunakan untuk mengelola data-data transaksi."
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "nama",
+											"value": "Rizky Fadhillah",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "customer@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "Customer",
+											"description": "[\"Merchant\", \"Customer\"]",
+											"type": "text"
+										},
+										{
+											"key": "no_hp",
+											"value": "0821-6306-8108",
+											"type": "text"
+										},
+										{
+											"key": "alamat",
+											"value": "Jl.Jamin Ginting Km.8 No.279D",
+											"type": "text"
+										},
+										{
+											"key": "provinsi",
+											"value": "34",
+											"description": "Diambil dari API Provinsi Raja Ongkir",
+											"type": "text"
+										},
+										{
+											"key": "kota",
+											"value": "278",
+											"description": "Diambil dari API Kota Raja Ongkir",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/register",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "customer@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/login",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Public_Url}}/api/logout",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Product",
+					"item": [
+						{
+							"name": "Read",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Public_Url}}/api/product/all",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"product",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Public_Url}}/api/product/1",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"product",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Transaksi",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "quantity",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "pengiriman",
+											"value": "jne",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Public_Url}}/api/transaksi",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"transaksi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Public_Url}}/api/transaksi/pemesanan",
+									"host": [
+										"{{Public_Url}}"
+									],
+									"path": [
+										"api",
+										"transaksi",
+										"pemesanan"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Public_Url}}/api/customer/profile",
+							"host": [
+								"{{Public_Url}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "Customer update",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "update@mail.com",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passwordupdate",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "no_hp",
+									"value": "0812-3456-7890",
+									"type": "text"
+								},
+								{
+									"key": "alamat",
+									"value": "Alamat update",
+									"type": "text"
+								},
+								{
+									"key": "provinsi",
+									"value": "1",
+									"description": "Diambil dari API Provinsi Raja Ongkir",
+									"type": "text"
+								},
+								{
+									"key": "kota",
+									"value": "2",
+									"description": "Diambil dari API Kota Raja Ongkir",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Public_Url}}/api/customer/profile",
+							"host": [
+								"{{Public_Url}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Customer folder berisi sekumpulan API yang digunakan untuk mengelola data dan aktivitas customer dalam marketplace. API ini memungkinkan customer untuk mendaftarkan product, mengelola transaksi. Berikut adalah beberapa endpoint utama yang terdapat dalam folder ini:\n\n- Detail dan Update  \n    Digunakan untuk melakukan perubahan atau melihat data Customer, seperti nama, email, password dan alamat yang nantinya akan digunakan sebagai petunjuk untuk mengetahui biaya ongkos pengiriman barang customer.\n    \n- Folder Auth  \n    Didalam folder Auth terdapat 3 buah endpoint yaitu: Register, Login, Logout. Digunakan untuk authentication pada Customer.\n    \n- Folder Product  \n    Didalam folder product terdapat 2 buah end point yaitu: Read dan Detail. Dimana endpoint tersebut digunakan untuk melihat detail dari product.\n    \n- Folder Transaksi  \n    Didalam folder transaksi terdapat 2 buah end point yaitu: Create dan Read. Dimana semua endpoint tersebut digunakan untuk mengelola data-data transaksi."
+		},
+		{
+			"name": "API RAJA ONGKIR (GET PROVINSI)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "key",
+						"value": "42c60c30a359b97a81ea85d4cc34e9a5",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.rajaongkir.com/starter/province",
+					"protocol": "https",
+					"host": [
+						"api",
+						"rajaongkir",
+						"com"
+					],
+					"path": [
+						"starter",
+						"province"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API RAJA ONGKIR (GET KOTA)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "key",
+						"value": "42c60c30a359b97a81ea85d4cc34e9a5",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.rajaongkir.com/starter/city?province=34",
+					"protocol": "https",
+					"host": [
+						"api",
+						"rajaongkir",
+						"com"
+					],
+					"path": [
+						"starter",
+						"city"
+					],
+					"query": [
+						{
+							"key": "province",
+							"value": "34"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API RAJA ONGKIR (CEK ONGKIR)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "key",
+						"value": "42c60c30a359b97a81ea85d4cc34e9a5",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "origin",
+							"value": "115",
+							"description": "Kota Depok",
+							"type": "text"
+						},
+						{
+							"key": "destination",
+							"value": "278",
+							"description": "Kota Medan",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "4500",
+							"type": "text"
+						},
+						{
+							"key": "courier",
+							"value": "jne",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.rajaongkir.com/starter/cost",
+					"protocol": "https",
+					"host": [
+						"api",
+						"rajaongkir",
+						"com"
+					],
+					"path": [
+						"starter",
+						"cost"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Public_Url",
+			"value": "https://merkuhi.ar24f.my.id"
+		},
+		{
+			"key": "merchant_token",
+			"value": "2|PgIFfVITrwsFpJelEdD8a0AbWZaw2eZoZ3vBLy5f4d485414"
+		},
+		{
+			"key": "customer_token",
+			"value": "4|FYs0ABWcYHOvFdwteJpRNFvUfQ6OvtOy0B5rt3sw6e96eba3"
+		}
+	]
+}
